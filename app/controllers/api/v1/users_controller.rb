@@ -23,7 +23,8 @@ class Api::V1::UsersController < Api::V1::ApiController
     @user = User.find_by_email(user_params[:email])
     if @user && @user.is_password?(user_params[:password])
       @user.ensure_authentication_token!
-      render :json => { success: true, status: 200, name: @user.name, email: @user.email, :auth_token => @user.auth_token}
+      @short_urls = @user.short_urls.paginate(:page => params[:page], :per_page => 2)
+      render :json => {user: { success: true, status: 200, name: @user.name, email: @user.email, :auth_token => @user.auth_token, short_urls: @short_urls }}
     else
       render json: { success: false, message: 'Error with your login or password' }, status: 401
     end

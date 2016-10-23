@@ -11,13 +11,6 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: { case_sensitive: false }
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 
-  def ensure_authentication_token!
-    if self.auth_token.blank?
-      self.auth_token = generate_authentication_token
-      self.save
-    end
-  end
-
   def generate_authentication_token
     loop do
       token = generate_secure_token_string
@@ -31,6 +24,13 @@ class User < ActiveRecord::Base
 
   def is_password?(password)
     BCrypt::Password.new(self.encrypted_password) == password
+  end
+
+  def ensure_authentication_token!
+    if self.auth_token.blank?
+      self.auth_token = generate_authentication_token
+      self.save
+    end
   end
 
   private
