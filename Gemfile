@@ -25,4 +25,6 @@ group :development, :test do
   gem 'spring'
   gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
+  gem 'shoulda-matchers'
+  gem 'faker'
 end

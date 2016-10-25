@@ -1,10 +1,11 @@
 class ShortUrl < ActiveRecord::Base
   belongs_to :user
+  has_many :short_visits, dependent: :destroy
 
   after_create :shortener
 
   has_many :short_visits, dependent: :destroy
-  validates :original_url, uniqueness: { case_sensitive: true }
+  validates :original_url, presence: true, uniqueness: { case_sensitive: true }
 
   def shorty_full
   	return 'http://'+ HOSTNAME + '/' + self.shorty rescue nil

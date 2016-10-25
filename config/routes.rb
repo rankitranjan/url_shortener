@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get "/users" => "users#index"
   	  post "users/registration" => 'users#registration'
   	  post "users/login" => 'users#login'
   	  delete "users/logout" => 'users#logout'

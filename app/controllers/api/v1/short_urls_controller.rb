@@ -16,7 +16,7 @@ class Api::V1::ShortUrlsController < Api::V1::ApiController
     if @short_url.save
       render json: {success: true, status: 200, original_url: @short_url.original_url, user_id: @short_url.user_id, shorty: @short_url.shorty_full, created_at: @short_url.created_at, updated_at: @short_url.updated_at}
       else
-       render :json => {success: false, :errors => @short_url.errors.to_a.uniq.join(", ")}, :status => 200
+       render :json => {success: false, :errors => @short_url.errors.to_a.uniq.join(", ")}, :status => 422
     end
   end
 
@@ -24,13 +24,13 @@ class Api::V1::ShortUrlsController < Api::V1::ApiController
     if @short_url.update({ original_url: short_url_params[:original_url], user_id: @current_user.id})
       render json: {success: true, status: 200, original_url: @short_url.original_url, user_id: @short_url.user_id, created_at: @short_url.created_at, updated_at: @short_url.updated_at, shorty: @short_url.shorty_full, visits_count: @short_url.visits_count}
     else
-     render :json => {success: false, :errors => @short_url.errors.to_a.uniq.join(", ")}, :status => 200
+     render :json => {success: false, :errors => @short_url.errors.to_a.uniq.join(", ")}, :status => 422
     end
   end
 
   def destroy
     @short_url.destroy
-    render :json => { success: true }
+    render :json => { success: true }, :status => 200
   end
 
   def redirect
@@ -43,10 +43,10 @@ class Api::V1::ShortUrlsController < Api::V1::ApiController
         short_obj.add_vistors_count
         redirect_to "#{short_obj.original_url}"
       else
-        render :json => {success: false, :errors => "url not valid"}, :status => 404
+        render :json => {success: false, :errors => "url not valid"}, :status => 422
       end
     else
-      render :json => {success: false, :errors => "url not valid"}, :status => 404
+      render :json => {success: false, :errors => "url not valid"}, :status => 422
     end
   end
 
